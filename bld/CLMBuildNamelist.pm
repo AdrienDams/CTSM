@@ -35,7 +35,7 @@ use File::Basename qw(dirname);
 use English;
 use Getopt::Long;
 use IO::File;
-use File::Glob ':bsd_glob';
+use File::Glob ':glob';
 
 #-------------------------------------------------------------------------------
 #
