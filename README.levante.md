@@ -1,52 +1,67 @@
-How to run CTSM on Mistral?
+# How to build and run CTSM on Levante?
 
-1. Load extra modules
-> module load python/2.7.12
-> module load intel
-> module load openmpi/2.0.2p2_hpcx-intel14
-> module load esmf
-> module load nco/4.7.5-gcc64
-> module load ncl
-> module load gcc/6.4.0
-> module load cmake
+1. Initialisation
+2. Create a case
+3. Build the model
+4. Submit the case
 
-2. Set up additionnal LD_LIBRARY_PATH paths
-> export LD_LIBRARY_PATH="/sw/rhel6-x64/netcdf/netcdf_c-4.4.0-parallel-openmpi2-intel14/lib:/sw/rhel6-x64/netcdf/netcdf_fortran-4.4.3-parallel-openmpi2-intel14/lib:$LD_LIBRARY_PATH"
+## 1. Initialisation
 
-3. Copy /pf/a/a271098/.cime/config_machines.xml and /pf/a/a271098/.cime/config_batch.xml into your home in a .cime directory
+The model code currently running on Levante is in `/work/aa0049/a271098/CTSM` and https://github.com/AdrienDams/CTSM/tree/levante.
 
-4. Use /work/aa0049/a271098/CTSM/cime/scripts/create_newcase in one of your home directory. 
+The current CTSM version is `ctsm5.1.dev086-3-gec6bb36a9` and will be updated reguraly.
 
-From there, consult the documentation on this website: https://escomp.github.io/ctsm-docs/versions/master/html/index.html. You can use my script /pf/a/a271098/CTSM_runs/default/newcase_test.bash to help you.
+1.1. Copy the folder `/home/a/a271098/.cime` into your home directory:
+```
+cp /home/a/a271098/.cime ~
+```
+- Change your account name on line 504 of `config_batch.xml` and line 9 of `config_machines.xml`.
+- Change your scratch directory on line 13 of `config_machines.xml` (currently `/scratch/a/$USER`).
 
-All the results of your simulation will be saved in my work directory /work/aa0049/a271098/archive and /work/aa0049/a271098/scratch. Do not replace a case already existing! A request message will show up when your create the case:
-Directory /work/aa0049/a271098/CTSM/scratch/I1850CLM50_001/bld already exists, (r)eplace, (a)bort, or (u)se existing?
+1.2. Load these modules
+```
+module load git openjdk python3 intel-oneapi-mpi/2021.5.0-intel-2021.5.0 esmf/8.2.0-intel-2021.5.0 gcc slk netcdf-c/4.8.1-openmpi-4.1.2-intel-2021.5.0 netcdf-fortran/4.5.3-openmpi-4.1.2-intel-2021.5.0 intel-oneapi-mkl/2022.0.1-gcc-11.2.0
+```
 
-If you want to store the results of your simulations in your work directory, follow the second part.
+1.3. Do these additionnals tags
+```
+export CIME_MACHINE=levante
+MKLROOT="/sw/spack-levante/intel-oneapi-mkl-2022.0.1-ttdktf/mkl/2022.0.1"
+```
 
-Enjoy!
+1.4. Add to your `~/.condarc` (or create file)
+```
+channels:
+  - conda-forge
+auto_activate_base: false
+```
 
+## 2. Create a case
 
-How to install CTSM in your work directory /work/aa0049/$USER/
+The resolutions that have been tested on Levante are: `f19_g17`. The compsets that have been tested on Levante are: `I2000Clm50Sp` `I2000Clm50BgcCrop` `I2000Clm50Fates`.
 
-1. Clone CTSM github in your home directory
-> git clone https://github.com/ESCOMP/CTSM.git
-Watch out: only the version 5a0ba10 is working on mistral. More recent versions still need to be tested. To use this version do this following line in /work/aa0049/$USER/CTSM:
-> git checkout 5a0ba100a094c7152fa0f7247d44f2e88a42823f
+2.1. Create your case (example here is with the resolution `f19_g17` and the compset `I2000Clm50Sp`)
+```
+/work/aa0049/a271098/CTSM/cime/scripts/create_newcase --case I2000CLM50_001 --mach levante --res f19_g17 --compset I2000Clm50Sp --run-unsupported
+```
 
-2. Unpack the model
-> ./manage_externals/checkout_externals
+## 3. Build the model
 
-3. Copy my CLMBuildNamelist.pm in your directory /work/aa0049/$USER/CTSM/bld/
-> cp /work/aa0049/a271098/CTSM/bld/CLMBuildNamelist.pm .
+3.1. Setup your case
+```
+./case.setup
+```
 
-5. Copy my config_inputdata.xml in your directory /work/aa0049/$USER/CTSM/cime/config/cesm
-> cp /work/aa0049/a271098/CTSM/cime/config/cesm/config_inputdata.xml .
+3.2. Build your case
+```
+./case.build
+```
 
-6. Start from "How to run CTSM on Mistral?"
-- When you copy config_machines.xml, replace every a271098 by $USER
+## 4. Submit the case
+```
+./case.submit
+```
 
-Enjoy!
+Thanks for Heidrun Matthes, Irina Fast, and the DKRZ support team to help me install CTSM on Levante.
 
-
-If you need help or want to do a regional simulation, contact adamseau@awi.de.
+If you need help or want to do a regional simulation or use ERA5 for forcings, contact adamseau@awi.de.
