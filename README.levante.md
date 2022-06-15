@@ -32,7 +32,7 @@ change your account name.
 module load git openjdk python3 intel-oneapi-mpi/2021.5.0-intel-2021.5.0 esmf/8.2.0-intel-2021.5.0 gcc slk netcdf-c/4.8.1-openmpi-4.1.2-intel-2021.5.0 netcdf-fortran/4.5.3-openmpi-4.1.2-intel-2021.5.0 intel-oneapi-mkl/2022.0.1-gcc-11.2.0
 ```
 
-### 1.3. Do these additionnals tags
+### 1.3. Do these additional  tags
 ```
 export CIME_MACHINE=levante
 MKLROOT="/sw/spack-levante/intel-oneapi-mkl-2022.0.1-ttdktf/mkl/2022.0.1"
