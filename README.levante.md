@@ -11,25 +11,34 @@ The model code currently running on Levante is in `/work/aa0049/a271098/CTSM` an
 
 The current CTSM version is `ctsm5.1.dev086-3-gec6bb36a9` and will be updated reguraly.
 
-1.1. Copy the folder `/home/a/a271098/.cime` into your home directory:
+### 1.1. Copy the folder `/home/a/a271098/.cime` into your home directory:
 ```
-cp /home/a/a271098/.cime ~
+cp -Lr /home/a/a271098/.cime ~
 ```
-- Change your account name on line 504 of `config_batch.xml` and line 9 of `config_machines.xml`.
-- Change your scratch directory on line 13 of `config_machines.xml` (currently `/scratch/a/$USER`).
+#### 1.1.1 In line (504) of `config_batch.xml`:
+```
+    <directive> --account=aa0049           </directive>
+```
+change your account name.
 
-1.2. Load these modules
+#### 1.1.2 In line (13) of `config_machines.xml`: 
+```
+    <PROJECT>aa0049</PROJECT>
+```
+change your account name.
+
+### 1.2. Load these modules
 ```
 module load git openjdk python3 intel-oneapi-mpi/2021.5.0-intel-2021.5.0 esmf/8.2.0-intel-2021.5.0 gcc slk netcdf-c/4.8.1-openmpi-4.1.2-intel-2021.5.0 netcdf-fortran/4.5.3-openmpi-4.1.2-intel-2021.5.0 intel-oneapi-mkl/2022.0.1-gcc-11.2.0
 ```
 
-1.3. Do these additionnals tags
+### 1.3. Do these additionnals tags
 ```
 export CIME_MACHINE=levante
 MKLROOT="/sw/spack-levante/intel-oneapi-mkl-2022.0.1-ttdktf/mkl/2022.0.1"
 ```
 
-1.4. Add to your `~/.condarc` (or create file)
+### 1.4. Add to your `~/.condarc` (or create file)
 ```
 channels:
   - conda-forge
@@ -40,19 +49,19 @@ auto_activate_base: false
 
 The resolutions that have been tested on Levante are: `f19_g17`. The compsets that have been tested on Levante are: `I2000Clm50Sp` `I2000Clm50BgcCrop` `I2000Clm50Fates`.
 
-2.1. Create your case (example here is with the resolution `f19_g17` and the compset `I2000Clm50Sp`)
+### 2.1. Create your case (example here is with the resolution `f19_g17` and the compset `I2000Clm50Sp`)
 ```
 /work/aa0049/a271098/CTSM/cime/scripts/create_newcase --case I2000CLM50_001 --mach levante --res f19_g17 --compset I2000Clm50Sp --run-unsupported
 ```
 
 ## 3. Build the model
 
-3.1. Setup your case
+### 3.1. Setup your case
 ```
 ./case.setup
 ```
 
-3.2. Build your case
+### 3.2. Build your case
 ```
 ./case.build
 ```
