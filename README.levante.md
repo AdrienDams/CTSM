@@ -21,7 +21,7 @@ cp -Lr /home/a/a271098/.cime ~
 ```
 change your account name.
 
-#### 1.1.2 In line (13) of `config_machines.xml`: 
+#### 1.1.2 In line (9) of `config_machines.xml`: 
 ```
     <PROJECT>aa0049</PROJECT>
 ```
