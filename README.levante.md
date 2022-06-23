@@ -19,13 +19,13 @@ cp -Lr /home/a/a271098/.cime ~
 ```
     <directive> --account=aa0049           </directive>
 ```
-change your account name.
+change your project name (the project name by default is aa0049).
 
 #### 1.1.2 In line (9) of `config_machines.xml`: 
 ```
     <PROJECT>aa0049</PROJECT>
 ```
-change your account name.
+change your project name.
 
 ### 1.2. Load these modules
 ```
