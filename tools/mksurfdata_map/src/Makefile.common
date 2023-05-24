@@ -29,13 +29,10 @@ CURDIR := $(shell pwd)
 RM = rm
 
 # Check for the netcdf library and include directories 
-ifeq ($(LIB_NETCDF),$(null))
-  LIB_NETCDF := /usr/local/lib
-endif
+LIB_NETCDF := /sw/spack-levante/netcdf-fortran-4.5.3-k6xq5g/lib
+INC_NETCDF := /sw/spack-levante/netcdf-fortran-4.5.3-k6xq5g/include
+USER_LDLAGS := /sw/spack-levante/netcdf-fortran-4.5.3-k6xq5g/lib
 
-ifeq ($(INC_NETCDF),$(null))
-  INC_NETCDF := /usr/local/include
-endif
 
 ifeq ($(MOD_NETCDF),$(null))
   MOD_NETCDF := $(LIB_NETCDF)
@@ -66,6 +63,8 @@ endif
 ifeq ($(OPT),TRUE)
   CPPDEF := -DOPT
 endif
+
+CPPFLAGS := -DgFortran
 
 # Determine platform 
 UNAMES := $(shell uname -s)

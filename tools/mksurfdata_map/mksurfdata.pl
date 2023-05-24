@@ -47,7 +47,7 @@ my $nldef_file     = "$scrdir/../../bld/namelist_files/namelist_definition_ctsm.
 
 my $definition = Build::NamelistDefinition->new( $nldef_file );
 
-my $CSMDATA = "/glade/p/cesm/cseg/inputdata";
+my $CSMDATA = "/work/aa0049/a271098/inputdata";
 
 my %opts = ( 
                hgrid=>"all", 
@@ -78,13 +78,13 @@ my %opts = (
 	       outnc_dims=>"2",     
                usrname=>"",
                rundir=>"$cwd",
-               usr_mapdir=>"../mkmapdata",
+               usr_mapdir=>"/work/aa0049/a271098/CTSM_old_versions/CTSM_dev023/tools/mkmapdata",
                dynpft=>undef,
                csmdata=>$CSMDATA,
                urban_skip_abort_on_invalid_data_check=>undef,
            );
 
-my $numpft = 78;
+my $numpft = 16;
 
 #-----------------------------------------------------------------------------------------------
 sub usage {
@@ -316,7 +316,7 @@ sub write_transient_timeseries_file {
 
 sub write_namelist_file {
    my ($namelist_fname, $logfile_fname, $fsurdat_fname, $fdyndat_fname,
-      $glc_nec, $griddata, $gridtype, $map, $datfil, $double,
+      $glc_nec, $griddata, $map, $datfil, $double,
       $all_urb, $no_inlandwet, $vegtyp, $hrvtyp, 
       $landuse_timeseries_text_file, $setnumpft) = @_;
 
@@ -329,7 +329,6 @@ sub write_namelist_file {
 &clmexp
  nglcec           = $glc_nec
  mksrf_fgrid      = '$griddata'
- mksrf_gridtype   = '$gridtype'
  map_fpft         = '$map->{'veg'}'
  map_fglacier     = '$map->{'glc'}'
  map_fglacierregion = '$map->{'glcregion'}'
@@ -696,13 +695,13 @@ EOF
       #
       # Check if all urban single point dataset
       #
-      my @all_urb = ( "1x1_vancouverCAN", "1x1_mexicocityMEX", "1x1_urbanc_alpha" );
+      my @all_urb = ( "1x1_camdenNJ","1x1_vancouverCAN", "1x1_mexicocityMEX", "1x1_urbanc_alpha" );
       my $all_urb = ".false.";
       my $urb_pt  = 0;
       foreach my $urb_res ( @all_urb ) {
          if ( $res eq $urb_res ) {
             $all_urb = ".true.";
-            $urb_pt  = 1;
+            if ( $res ne "1x1_camdenNJ" ) { $urb_pt  = 1; }
          }
       }
       #
@@ -825,18 +824,9 @@ EOF
             print "resolution: $res ssp_rcp=$ssp_rcp sim_year = $sim_year\n";
             print "namelist: $namelist_fname\n";
             
-            my $gridtype;
-            $gridtype = "global";
-            if (index($res, '1x1_') != -1) {
-               $gridtype = "regional";
-            }
-            if (index($res, '5x5_amazon') != -1) {
-               $gridtype = "regional";
-            }
-
             write_namelist_file(
                  $namelist_fname, $logfile_fname, $fsurdat_fname, $fdyndat_fname,
-                 $glc_nec, $griddata, $gridtype, \%map, \%datfil, $double,
+                 $glc_nec, $griddata, \%map, \%datfil, $double,
                  $all_urb, $no_inlandwet, $vegtyp, $hrvtyp, 
                  $landuse_timeseries_text_file, $setnumpft);
 
