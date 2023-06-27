@@ -686,7 +686,7 @@ contains
             ! Thermal conductivity of snow, which from Sturm (1997) - ! VRD
             ! Only examine levels from snl(c)+1 -> 0 where snl(c) < 1
             if (snl(c)+1 < 1 .AND. (j >= snl(c)+1) .AND. (j <= 0)) then  
-               bw(c,j) = ((h2osoi_ice(c,j)*0.3)+h2osoi_liq(c,j))/(frac_sno(c)*dz(c,j)) ! ==RHOS
+               bw(c,j) = ((h2osoi_ice(c,j)*1)+h2osoi_liq(c,j))/(frac_sno(c)*dz(c,j)) ! ==RHOS
                ! thk(c,j) = tkair + (7.75e-5_r8 *bw(c,j) + 1.105e-6_r8*bw(c,j)*bw(c,j))*(tkice-tkair) ! Original (Jordan) Parameterisation
                  if (bw(c,j)  <= 156) then !LMW or 0.156 ?
 		 thk(c,j) = 0.023 + 0.234*(bw(c,j)/1000) !LMW - units changed by VRD
